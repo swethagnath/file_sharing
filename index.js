@@ -4,13 +4,14 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const { PORT } = require("./constant/server");
-const User = require("./routes/user")
+const User = require("./routes/user");
+
 
 dotenv.config();
 
-app.use(cors());
-
 app.use(express.json());
+
+app.use(cors())
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,16 +24,17 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/user', User);
+app.use("/user", User);
 
 mongoose
 .connect(process.env.MONGO_URI, {
     useNewUrlParser: true
 })
-.then(() => console.log("mongodb connected"))
+.then(() => {
+    app.listen(PORT, () => (
+        console.log("server is running", PORT)
+    ));
+})
 .catch(err => console.log(err));
 
-app.listen(PORT, () => (
-    console.log('server is running', PORT)
-));  
-
+  

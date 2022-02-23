@@ -1,2 +1,5 @@
 * for starting server
   npm run server
+* mongo 
+mongod --config /usr/local/etc/mongod.conf
+mongod --config /usr/local/etc/mongod.conf --auth
