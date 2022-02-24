@@ -94,6 +94,7 @@ router.post("/upload", requireLogin, upload.single("image"), async (req, res) =>
     if(!req.file) res.status(400).json({error: "Invalid file path", data: "only image/jpg,image/jpeg,image/png,video/mp4"}); 
 
     try{
+        // quality and resource type will figure out file type and compress it for storage.
         const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path, {resource_type: AUTO, quality: AUTO});
         const cloudinary_id = cloudinaryResponse.secure_url;
         const file = new File({
