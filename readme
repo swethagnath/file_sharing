@@ -7,7 +7,7 @@
     - cloudinary
 
 * Githup repository
-
+  - https://github.com/swethagnath/file_sharing.git
 
 * Starting application
   npm install //inside root directory
@@ -89,6 +89,3 @@
         - authorization 
       - value
         - token
-
-mongod --config /usr/local/etc/mongod.conf
-mongod --config /usr/local/etc/mongod.conf --auth
