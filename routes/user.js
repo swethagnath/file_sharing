@@ -11,6 +11,9 @@ const shortid = require("shortid");
 const {emailSchema, uploadSchema} = require("../utils/validation");
 const {AUTO} = require("../constant/common")
 
+//  Register User
+//  Params - email, password
+//  Return - message
 router.post("/signup", (req, res) => {
 
     const params =  {email, password} = req.body;
@@ -43,6 +46,10 @@ router.post("/signup", (req, res) => {
         
 });
 
+// LogIn User
+//  Params - email, password
+//  Return - token, message
+
 router.post("/signin", (req, res) => {
     const params =  {email, password} = req.body;
 
@@ -64,14 +71,16 @@ router.post("/signin", (req, res) => {
                     expiresIn: process.env.JWT_EXPIRATION_TIME
                 });
                 token = "Bearer " + token;
-                return res.status(200).json({data: token, message: "Logged in successfully"});
+                return res.status(200).json({token, message: "Logged in successfully"});
         })
         .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 })
 
-
+// LogIn User
+//  Params - email, password
+//  Return - token, message
 router.post("/upload", requireLogin, upload.single("image"), async (req, res) => {
     
     const params = {title, description} = req.query;
@@ -105,6 +114,9 @@ router.post("/upload", requireLogin, upload.single("image"), async (req, res) =>
     }
 });
 
+// Get files for a  User
+//  Return - data
+
 router.get("/files", requireLogin, async (req, res) => {
 
     File
@@ -115,6 +127,9 @@ router.get("/files", requireLogin, async (req, res) => {
     .catch(err => console.log(err))
 
 });
+
+// delete files by a  User
+//  Return - message
 
 router.delete("/file/:fileId", requireLogin, (req, res) => {
 
@@ -137,6 +152,9 @@ router.delete("/file/:fileId", requireLogin, (req, res) => {
         return res.status(400).json({ error: "File doesnt exist" });
     })
 })
+
+// Edit file by a  User
+//  Return - message, file
 
 router.put("/file/:fileId", requireLogin, upload.single("image"), (req, res) => {
     
@@ -163,7 +181,7 @@ router.put("/file/:fileId", requireLogin, upload.single("image"), (req, res) => 
         file.save()     
         .then(result => {   
             if (result) {
-                return res.status(200).json(result);
+                return res.status(200).json({message:"Successfully edited", result});
             } else {
                 return res.status(400).json({ error: "err" });
             }
@@ -173,20 +191,25 @@ router.put("/file/:fileId", requireLogin, upload.single("image"), (req, res) => 
     .catch(() => res.status(400).json({ error: "File doesnot exist" }))  
 })
 
+// create short url
+//  Return - message, data
 
-router.post("/file/:fileId", requireLogin, (req, res) => {
-    const baseUrl = "http:localhost:5000/user/file";
+router.post("/file/shorturl/:FileId", requireLogin, (req, res) => {
+    const baseUrl = "http:localhost:5000/user/file/shorturl";
     const urlCode = shortid.generate();
     const shortUrl = baseUrl + "/" + urlCode;
 
-    File.findByIdAndUpdate(req.params.fileId, {$set:{url_code:urlCode, short_url:shortUrl}}, {upsert:true})
+    File.findByIdAndUpdate(req.params.FileId, {$set:{url_code:urlCode, short_url:shortUrl}}, {upsert:true})
     .then(file => {
         return res.status(201).json({message: "Created sucessfuly", data: {shortUrl}});
     })
     .catch(err => res.status(400).json({ error: "File doesnot exist" }))
 })
 
-router.get("/file/:urlCode", (req, res) => {
+// Redirect short url
+//  Return - redirection
+
+router.get("/file/shorturl/:urlCode", (req, res) => {
     const urlCode = req.params.urlCode;
     File.findOne({url_code:urlCode})
     .then(file => {

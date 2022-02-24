@@ -1,5 +1,94 @@
-* for starting server
-  npm run server
-* mongo 
+* File sharing Application
+  This application is based on Node js , Express as framework and database Mongodb
+  File can be image or video  
+    - 'image/jpg','image/jpeg','image/png','video/mp4'
+  Used Multer package for uploading
+  File stored used in cloud
+    - cloudinary
+
+* Githup repository
+
+
+* Starting application
+  npm install //inside root directory
+  start server 
+    - npm run server
+    - default port 5000
+    - http://localhost:5000
+  start Mongodb
+    - mongod
+
+*Api
+  - tested through Postman
+
+  *. signup
+    - http://localhost:5000/user/signup
+    - Post
+    - body params
+      - email and password
+
+  *. signin
+    - http://localhost:5000/user/signin
+    - Post
+    - body params
+      - email and password
+
+  *. File Upload
+    - http://localhost:5000/user/upload?title=xyz&description=xyz
+    - Post
+    - body
+       - Form-data
+          - image
+    - params
+      - title
+      - description
+    - Headers
+      - key 
+        - authorization 
+      -value
+        - token
+  
+  *. Edit File
+    - http://localhost:5000/user/file/:fileId?title=xyz&description=xyz
+    - Put
+    - body
+      - Form-data
+        - image
+    - params
+      - title
+      - description
+    - Headers
+      - key 
+        - authorization 
+      -value
+        - token
+
+  *. Get Files of a user
+    - http://localhost:5000/user/files
+    - GET
+    - Headers
+      - key 
+        - authorization 
+      - value
+        - token
+
+  *. Delete File
+    - http://localhost:5000/user/file/:fileId
+    - DELETE
+    - Headers
+      - key 
+        - authorization 
+      - value
+        - token
+  
+  *. short url
+    - http://localhost:5000/user/file/shorturl/:fileId
+    - Post
+    - - Headers
+      - key 
+        - authorization 
+      - value
+        - token
+
 mongod --config /usr/local/etc/mongod.conf
 mongod --config /usr/local/etc/mongod.conf --auth
