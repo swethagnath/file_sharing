@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose')
-const {User} = require("../model/user");
+const { User } = require("../model/user");
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers;
@@ -18,8 +18,13 @@ module.exports = (req, res, next) => {
         const { _id } = payload;
         User.findById(_id)
             .then(userdata => {
-                req.user = userdata;
-                next();
+                if (userdata) {
+                    req.user = userdata;
+                    next();
+                } else {
+                    return res.status(401).json({ error: "user doesnt exist" });
+                }
+
             })
     })
 
