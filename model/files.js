@@ -1,19 +1,25 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types
+const { ObjectId } = mongoose.Schema.Types;
 
 const fileSchema = new mongoose.Schema({
     title: {
-       type: String
+       type: String,
+       required: true
     },
     description: {
-        type: String
+        type: String,
+        required: true
     },
     cloudinary_id: {
-        type: String
+        type: String,
+        required: true
     },
     user_id: {
         type: ObjectId, 
         ref: "User"
+    },
+    file_name: {
+        type: String
     },
     url_code:{
         type: String,
